@@ -23,7 +23,7 @@ class ForumController extends AbstractController
     #[Route('/api/forums/categories', name: 'get_forum_getAllForumCategories', methods: 'GET')]
     public function getAllForumCategories(): Response
     {
-        $categoriesJson = $this->serializer->serialize($this->categoryRepository->findAll(), "json",
+        $categoriesJson = $this->serializer->serialize($this->categoryRepository->findAllActivated(), "json",
             ["groups" => "forumcategory_read"]);
         return new JsonResponse($categoriesJson, Response::HTTP_OK, [], true);
     }

@@ -5,14 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6525601f-1765-4e01-a98b-56f15b30de5f" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/Version20230505131942.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/ForumController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ForumController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/ForumCategory.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/ForumCategory.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/ForumPost.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/ForumPost.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/ForumCategoryRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/ForumCategoryRepository.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -127,7 +123,7 @@
       <workItem from="1683293277783" duration="2697000" />
       <workItem from="1684827226783" duration="166000" />
       <workItem from="1684998319364" duration="1281000" />
-      <workItem from="1684999620772" duration="9428000" />
+      <workItem from="1684999620772" duration="10466000" />
     </task>
     <servers />
   </component>

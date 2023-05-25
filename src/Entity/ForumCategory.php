@@ -30,7 +30,6 @@ class ForumCategory
     private ?string $uuid = null;
 
     #[ORM\Column]
-    #[Groups(['forumcategory_read'])]
     private ?bool $isDeleted = null;
 
     #[ORM\Column]
