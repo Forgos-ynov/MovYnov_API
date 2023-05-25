@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ForumCategoryRepository::class)]
 class ForumCategory
@@ -17,24 +18,31 @@ class ForumCategory
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['forumcategory_read'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['forumcategory_read'])]
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['forumcategory_read'])]
     private ?string $uuid = null;
 
     #[ORM\Column]
+    #[Groups(['forumcategory_read'])]
     private ?bool $isDeleted = null;
 
     #[ORM\Column]
+    #[Groups(['forumcategory_read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
+    #[Groups(['forumcategory_read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\OneToMany(mappedBy: 'idForumCategory', targetEntity: ForumPost::class, orphanRemoval: true)]
+    #[Groups(['forumcategory_read'])]
     private Collection $forumPosts;
 
     public function __construct()

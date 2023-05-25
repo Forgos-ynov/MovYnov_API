@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ForumPostRepository::class)]
 class ForumPost
@@ -17,6 +18,11 @@ class ForumPost
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['forumcategory_read'])]
+    private ?string $title = null;
+
+    #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['forumcategory_read'])]
     private ?string $content = null;
 
     #[ORM\ManyToOne(inversedBy: 'forumPosts')]
@@ -24,6 +30,7 @@ class ForumPost
     private ?ForumCategory $idForumCategory = null;
 
     #[ORM\Column]
+    #[Groups(['forumcategory_read'])]
     private ?int $idMedia = null;
 
     #[ORM\ManyToOne(inversedBy: 'forumPosts')]
@@ -31,18 +38,23 @@ class ForumPost
     private ?User $idUser = null;
 
     #[ORM\Column]
+    #[Groups(['forumcategory_read'])]
     private ?bool $spoilers = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['forumcategory_read'])]
     private ?string $uuid = null;
 
     #[ORM\Column]
+    #[Groups(['forumcategory_read'])]
     private ?bool $isDeleted = null;
 
     #[ORM\Column]
+    #[Groups(['forumcategory_read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
+    #[Groups(['forumcategory_read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\OneToMany(mappedBy: 'idPost', targetEntity: ForumComment::class, orphanRemoval: true)]
@@ -192,6 +204,18 @@ class ForumPost
                 $forumComment->setIdPost(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
 
         return $this;
     }

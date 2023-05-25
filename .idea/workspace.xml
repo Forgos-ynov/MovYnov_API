@@ -10,8 +10,9 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/bundles.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/bundles.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony.lock" beforeDir="false" afterPath="$PROJECT_DIR$/symfony.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/Version20230505131942.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/ForumCategory.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/ForumCategory.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/ForumPost.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/ForumPost.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,7 +21,9 @@
   </component>
   <component name="ComposerSettings" doNotAsk="true" synchronizationState="SYNCHRONIZE">
     <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
-    <execution />
+    <execution>
+      <executable path="composer" />
+    </execution>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -87,6 +90,7 @@
       <path value="$PROJECT_DIR$/vendor/symfony/security-http" />
       <path value="$PROJECT_DIR$/vendor/nikic/php-parser" />
       <path value="$PROJECT_DIR$/vendor/symfony/maker-bundle" />
+      <path value="$PROJECT_DIR$/vendor/symfony/serializer" />
     </include_path>
   </component>
   <component name="ProjectId" id="2OxhR19rkkqpc6cAewnE8cYN7EB" />
@@ -123,7 +127,7 @@
       <workItem from="1683293277783" duration="2697000" />
       <workItem from="1684827226783" duration="166000" />
       <workItem from="1684998319364" duration="1281000" />
-      <workItem from="1684999620772" duration="493000" />
+      <workItem from="1684999620772" duration="9428000" />
     </task>
     <servers />
   </component>
