@@ -25,6 +25,7 @@ class ForumController extends AbstractController
     {
         $categoriesJson = $this->serializer->serialize($this->categoryRepository->findAllActivated(), "json",
             ["groups" => "forumcategory_read"]);
+//        return $this->json()
         return new JsonResponse($categoriesJson, Response::HTTP_OK, [], true);
     }
 }
