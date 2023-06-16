@@ -34,7 +34,9 @@ security:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
-        - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/register, roles: PUBLIC_ACCESS }
+#        - { path: ^/api/forums/categories, roles: PUBLIC_ACCESS, methods: [GET] }
+        - { path: ^/api,       roles: ROLE_USER }
 
 when@test:
     security:
