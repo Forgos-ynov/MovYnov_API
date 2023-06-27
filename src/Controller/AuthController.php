@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,25 +23,37 @@ class AuthController extends AbstractController
     private SerializerInterface $serializer;
     private ValidatorInterface $validator;
     private JWTTokenManagerInterface $jwtManager;
+    private UserRepository $userRepository;
 
 
     /**
      * Constructeur de mon controlleur de booklet
      *
      * @param SerializerInterface $serializer
+     * @param ValidatorInterface $validator
+     * @param EntityManagerInterface $entityManager
+     * @param JWTTokenManagerInterface $jwtManager
+     * @param UserRepository $userRepository
      */
     public function __construct(SerializerInterface $serializer, ValidatorInterface $validator,
-                                EntityManagerInterface $entityManager, JWTTokenManagerInterface $jwtManager)
+                                EntityManagerInterface $entityManager, JWTTokenManagerInterface $jwtManager,
+                                UserRepository $userRepository)
     {
         $this->serializer = $serializer;
         $this->validator = $validator;
         $this->entityManager = $entityManager;
         $this->jwtManager = $jwtManager;
+        $this->userRepository = $userRepository;
     }
 
     #[Route('/api/register', name: 'post_auth_registerAuthController', methods: ["POST"])]
     public function registerAuthController(Request $request): JsonResponse
     {
+        if ($this->userExistInDB($request)) {
+            $data = $this->serializer->serialize(["message" => "Problème avec l'e-mail il est déjà existant ou n'est pas définit."], 'json');
+            return new JsonResponse($data, Response::HTTP_FORBIDDEN, [], true);
+        }
+
         $user = $this->serializer->deserialize($request->getContent(), User::class, "json");
         $user->setIsDeleted(false);
         $today = new \DateTimeImmutable();
@@ -72,8 +85,18 @@ class AuthController extends AbstractController
     #[Route('/api/login', name: 'post_auth_loginAuthController', methods: "POST")]
     public function loginAuthController(Request $request): JsonResponse
     {
-        var_dump($request);
-        die();
+        $res = $this->userExistInDB($request);
+        if ($res) {
+            $user = $res[0];
+            $token = $this->jwtManager->create($user);
+            $data = ['token' => $token];
+            $context = SerializationContext::create()->setGroups(["getUser"]);
+            $serializedData = $this->serializer->serialize($data, 'json', $context);
+            return new JsonResponse($serializedData, Response::HTTP_OK, [], true);
+        }
+
+        $data = $this->serializer->serialize(["message" => "Problème avec l'e-mail il est déjà existant ou n'est pas définit."], 'json');
+        return new JsonResponse($data, Response::HTTP_FORBIDDEN, [], true);
     }
 
     /**
@@ -82,7 +105,7 @@ class AuthController extends AbstractController
      * @param $object
      * @return integer
      */
-    public function validatorError($object): int
+    private function validatorError($object): int
     {
         $errors = $this->validator->validate($object);
         return $errors->count();
@@ -94,10 +117,24 @@ class AuthController extends AbstractController
      * @param $object
      * @return JsonResponse
      */
-    public function jsonResponseValidatorError($object): JsonResponse
+    private function jsonResponseValidatorError($object): JsonResponse
     {
         $errors = $this->validator->validate($object);
         return new JsonResponse($this->serializer->serialize($errors, "json"),
             Response::HTTP_BAD_REQUEST, [], true);
+    }
+
+    private function userExistInDB(Request $request)
+    {
+        $bodyContent = $request->getContent();
+        $infos = json_decode($bodyContent, true);
+        if (!isset($infos["email"])) {
+            return true;
+        }
+        $userExist = $this->userRepository->retrieveUserByEmail($infos["email"]);
+        if (sizeof($userExist) == 0) {
+            return false;
+        }
+        return $userExist;
     }
 }
