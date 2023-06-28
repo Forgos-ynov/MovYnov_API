@@ -15,14 +15,12 @@ use JMS\Serializer\SerializationContext;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use DateTimeImmutable;
 
 class AuthController extends AbstractController
 {
     private SerializerInterface $serializer;
     private ValidatorInterface $validator;
-    private JWTTokenManagerInterface $jwtManager;
     private UserRepository $userRepository;
 
 
@@ -32,17 +30,14 @@ class AuthController extends AbstractController
      * @param SerializerInterface $serializer
      * @param ValidatorInterface $validator
      * @param EntityManagerInterface $entityManager
-     * @param JWTTokenManagerInterface $jwtManager
      * @param UserRepository $userRepository
      */
     public function __construct(SerializerInterface $serializer, ValidatorInterface $validator,
-                                EntityManagerInterface $entityManager, JWTTokenManagerInterface $jwtManager,
-                                UserRepository $userRepository)
+                                EntityManagerInterface $entityManager, UserRepository $userRepository)
     {
         $this->serializer = $serializer;
         $this->validator = $validator;
         $this->entityManager = $entityManager;
-        $this->jwtManager = $jwtManager;
         $this->userRepository = $userRepository;
     }
 
@@ -75,7 +70,7 @@ class AuthController extends AbstractController
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-        $token = $this->jwtManager->create($user);
+        $token = $this->createToken($user);
         $data = ['token' => $token];
         $context = SerializationContext::create()->setGroups(["getUser"]);
         $serializedData = $this->serializer->serialize($data, 'json', $context);
@@ -88,7 +83,7 @@ class AuthController extends AbstractController
         $res = $this->userExistInDB($request);
         if ($res) {
             $user = $res[0];
-            $token = $this->jwtManager->create($user);
+            $token = $this->createToken($user);
             $data = ['token' => $token];
             $context = SerializationContext::create()->setGroups(["getUser"]);
             $serializedData = $this->serializer->serialize($data, 'json', $context);
@@ -136,5 +131,18 @@ class AuthController extends AbstractController
             return false;
         }
         return $userExist;
+    }
+
+    private function createToken($user)
+    {
+        $payload = [
+            "iat" => time(),
+            "exp" => time() + (15 * 60),
+            "roles" => $user->getRoles(),
+            "pseudo" => $user->getPseudo(),
+            "email" => $user->getEmail()
+        ];
+        $json = json_encode($payload);
+        return base64_encode($json);
     }
 }

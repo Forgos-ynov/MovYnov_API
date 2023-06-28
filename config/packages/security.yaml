@@ -35,8 +35,7 @@ security:
         # - { path: ^/profile, roles: ROLE_USER }
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/api/register, roles: PUBLIC_ACCESS }
-#        - { path: ^/api/forums/categories, roles: PUBLIC_ACCESS, methods: [GET] }
-        - { path: ^/api,       roles: ROLE_USER }
+        - { path: ^/api,       roles: PUBLIC_ACCESS }
 
 when@test:
     security:
