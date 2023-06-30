@@ -20,6 +20,7 @@ use DateTimeImmutable;
 class AuthController extends AbstractController
 {
     private SerializerInterface $serializer;
+    private EntityManagerInterface $entityManager;
     private ValidatorInterface $validator;
     private UserRepository $userRepository;
 
