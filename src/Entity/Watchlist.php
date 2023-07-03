@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\WatchlistRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: WatchlistRepository::class)]
 class Watchlist
@@ -14,9 +15,11 @@ class Watchlist
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Groups(["user_read"])]
     private ?int $status = null;
 
     #[ORM\Column]
+    #[Groups(["user_read"])]
     private ?int $idMedia = null;
 
     #[ORM\ManyToOne(inversedBy: 'watchlists')]

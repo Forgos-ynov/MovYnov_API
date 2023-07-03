@@ -39,6 +39,13 @@ class ForumCategoryRepository extends ServiceEntityRepository
         }
     }
 
+    public function findAllActivated() {
+        return $this->createQueryBuilder("fc")
+            ->andWhere("fc.isDeleted = 0")
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return ForumCategory[] Returns an array of ForumCategory objects
 //     */

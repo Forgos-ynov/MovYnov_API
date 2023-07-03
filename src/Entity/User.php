@@ -9,6 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -19,9 +20,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Groups(["user_read"])]
     private ?string $email = null;
 
     #[ORM\Column]
+    #[Groups(["user_read"])]
     private array $roles = [];
 
     /**
@@ -31,12 +34,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 120)]
+    #[Groups(["user_read"])]
     private ?string $pseudo = null;
 
     #[ORM\Column]
+    #[Groups(["user_read"])]
     private ?bool $spoilers = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(["user_read"])]
     private ?string $uuid = null;
 
     #[ORM\Column]
@@ -49,6 +55,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\OneToMany(mappedBy: 'idUser', targetEntity: Watchlist::class)]
+    #[Groups(["user_read"])]
     private Collection $watchlists;
 
     #[ORM\OneToMany(mappedBy: 'idUser', targetEntity: ForumPost::class, orphanRemoval: true)]
