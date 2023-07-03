@@ -15,11 +15,11 @@ class Watchlist
     private ?int $id = null;
 
     #[ORM\Column]
-    #[Groups(["user_read"])]
+    #[Groups(["user_read", "watchlist_read"])]
     private ?int $status = null;
 
     #[ORM\Column]
-    #[Groups(["user_read"])]
+    #[Groups(["user_read", "watchlist_read"])]
     private ?int $idMedia = null;
 
     #[ORM\ManyToOne(inversedBy: 'watchlists')]

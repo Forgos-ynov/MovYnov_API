@@ -101,13 +101,13 @@ class ForumCategoryController extends AbstractController
         }
 
         $updateForumCat = $this->serializer->deserialize($request->getContent(), ForumCategory::class, "json");
-        $booklet = $this->loadForumCatData($updateForumCat, $forumCategory);
+        $forumCat = $this->loadForumCatData($updateForumCat, $forumCategory);
 
-        if ($this->validatorError($booklet)) {
-            return $this->jsonResponseValidatorError($booklet);
+        if ($this->validatorError($forumCat)) {
+            return $this->jsonResponseValidatorError($forumCat);
         }
 
-        $this->entityManager->persist($booklet);
+        $this->entityManager->persist($forumCat);
         $this->entityManager->flush();
 
         return new JsonResponse(null, Response::HTTP_CREATED);

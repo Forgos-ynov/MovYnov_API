@@ -21,6 +21,14 @@ class WatchlistRepository extends ServiceEntityRepository
         parent::__construct($registry, Watchlist::class);
     }
 
+    public function findAllWatchlistsByUserId($userId) {
+        return $this->createQueryBuilder("wl")
+            ->andWhere("wl.idUser = :id_user")
+            ->setParameter('id_user', $userId)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function save(Watchlist $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
