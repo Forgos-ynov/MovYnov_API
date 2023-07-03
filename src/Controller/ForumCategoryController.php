@@ -42,7 +42,7 @@ class ForumCategoryController extends AbstractController
     public function createForumCategory(Request $request): Response
     {
         $tokenRes = $this->tokenVerification($request);
-         if ($tokenRes == "pass") {
+         if ($tokenRes != "pass") {
              return $tokenRes;
          }
 
@@ -69,7 +69,7 @@ class ForumCategoryController extends AbstractController
     public function disableForumCategory(ForumCategory $forumCategory, Request $request): Response
     {
         $tokenRes = $this->tokenVerification($request);
-        if ($tokenRes == "pass") {
+        if ($tokenRes != "pass") {
             return $tokenRes;
         }
 
@@ -96,7 +96,7 @@ class ForumCategoryController extends AbstractController
     public function updateForumCategory(ForumCategory $forumCategory, Request$request): Response
     {
         $tokenRes = $this->tokenVerification($request);
-        if ($tokenRes == "pass") {
+        if ($tokenRes != "pass") {
             return $tokenRes;
         }
 

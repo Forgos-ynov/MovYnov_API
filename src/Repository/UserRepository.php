@@ -24,6 +24,22 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         parent::__construct($registry, User::class);
     }
 
+    public function findAllActivated() {
+        return $this->createQueryBuilder("u")
+            ->andWhere("u.isDeleted = 0")
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findUserByEmail($email) {
+        return $this->createQueryBuilder("u")
+            ->andWhere("u.email = :email")
+            ->setParameter('email', $email)
+            ->getQuery()
+            ->getResult();
+    }
+
+
     public function save(User $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);

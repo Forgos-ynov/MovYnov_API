@@ -17,18 +17,18 @@ class ImdbController extends AbstractController
         $this->sufixeUrl = "?append_to_response=credits&language=fr-FR&api_key=b8e285eb83d6d2fccd9f0acc529b5004";
     }
 
-    #[Route('/api/imdb/movies/{idMovie}', name: 'get_imdb_getInformationsOfOneMovie', methods: "GET")]
-    public function getInformationsOfOneMovie(int $idMovie): JsonResponse
+    #[Route('/api/imdb/movies/recommandation/{idMovieRecommandation}', name: 'get_imdb_getRecommandedMovies', methods: "GET")]
+    public function getRecommandedMovies(int $idMovieRecommandation): JsonResponse
     {
-        $url = $this->prefixeUrl . $idMovie . $this->sufixeUrl;
+        $url = $this->prefixeUrl . $idMovieRecommandation . "/recommendations" . $this->sufixeUrl;
         $json = $this->getJsonFromUrl($url);
         return $this->json($json);
     }
 
-    #[Route('/api/imdb/movies/recommandation/{idMovieRecommandation}', name: 'get_imdb_getInformationsOfOneMovie', methods: "GET")]
-    public function test(int $idMovieRecommandation): JsonResponse
+    #[Route('/api/imdb/movies/{idMovie}', name: 'get_imdb_getInformationsOfOneMovie', methods: "GET")]
+    public function getInformationsOfOneMovie(int $idMovie): JsonResponse
     {
-        $url = $this->prefixeUrl . $idMovieRecommandation . $this->sufixeUrl;
+        $url = $this->prefixeUrl . $idMovie . $this->sufixeUrl;
         $json = $this->getJsonFromUrl($url);
         return $this->json($json);
     }
