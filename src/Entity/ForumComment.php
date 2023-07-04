@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ForumCommentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ForumCommentRepository::class)]
 class ForumComment
@@ -15,25 +16,31 @@ class ForumComment
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(["oneForumPost_read"])]
     private ?string $content = null;
 
     #[ORM\ManyToOne(inversedBy: 'forumComments')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(["oneForumPost_read"])]
     private ?User $idUser = null;
 
     #[ORM\Column]
+    #[Groups(["oneForumPost_read"])]
     private ?bool $spoilers = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(["oneForumPost_read"])]
     private ?string $uuid = null;
 
     #[ORM\Column]
     private ?bool $isDeleted = null;
 
     #[ORM\Column]
+    #[Groups(["oneForumPost_read"])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
+    #[Groups(["oneForumPost_read"])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'forumComments')]

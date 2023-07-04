@@ -21,6 +21,16 @@ class ForumPostRepository extends ServiceEntityRepository
         parent::__construct($registry, ForumPost::class);
     }
 
+    public function findAllActivatedByMovieId(int $idMovie)
+    {
+        return $this->createQueryBuilder('fp')
+            ->andWhere('fp.idMedia = :idMovie')
+            ->andWhere('fp.isDeleted = false')
+            ->setParameter('idMovie', $idMovie)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function save(ForumPost $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);

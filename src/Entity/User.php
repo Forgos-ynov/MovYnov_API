@@ -34,7 +34,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 120)]
-    #[Groups(["user_read"])]
+    #[Groups(["user_read", "forumPost_read", "oneForumPost_read"])]
     private ?string $pseudo = null;
 
     #[ORM\Column]

@@ -91,7 +91,7 @@ class ForumCategoryController extends AbstractController
         return new JsonResponse($categoriesJson, Response::HTTP_OK, [], true);
     }
 
-    #[Route('/api/forums/categories/{idForumCat}', name: 'put_forumCat_disableForumCategory', methods: 'PUT')]
+    #[Route('/api/forums/categories/{idForumCat}', name: 'put_forumCat_updateForumCategory', methods: 'PUT')]
     #[ParamConverter("forumCategory", options: ["id" => "idForumCat"])]
     public function updateForumCategory(ForumCategory $forumCategory, Request$request): Response
     {

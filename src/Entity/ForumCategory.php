@@ -18,11 +18,11 @@ class ForumCategory
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['forumcategory_read'])]
+    #[Groups(['forumcategory_read', "forumPost_read", "oneForumPost_read"])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['forumcategory_read'])]
+    #[Groups(['forumcategory_read', "forumPost_read", "oneForumPost_read"])]
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
