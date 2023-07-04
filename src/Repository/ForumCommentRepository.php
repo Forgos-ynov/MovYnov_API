@@ -39,6 +39,28 @@ class ForumCommentRepository extends ServiceEntityRepository
         }
     }
 
+    public function findAllActivatedByPostId($postId)
+    {
+        return $this->createQueryBuilder('fc')
+            ->andWhere('fc.idPost = :postId')
+            ->andWhere('fc.isDeleted = false')
+            ->setParameter('postId', $postId)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findAllActivatedByUserId($userId)
+    {
+        return $this->createQueryBuilder('fc')
+            ->andWhere('fc.idUser = :userId')
+            ->andWhere('fc.isDeleted = false')
+            ->setParameter('userId', $userId)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
 //    /**
 //     * @return ForumComment[] Returns an array of ForumComment objects
 //     */

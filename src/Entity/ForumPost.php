@@ -18,20 +18,20 @@ class ForumPost
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['forumcategory_read', "forumPost_read", "oneForumPost_read"])]
+    #[Groups(['forumcategory_read', "forumPost_read", "oneForumPost_read", "forumComment_read"])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['forumcategory_read', "forumPost_read", "oneForumPost_read"])]
+    #[Groups(['forumcategory_read', "forumPost_read", "oneForumPost_read", "forumComment_read"])]
     private ?string $content = null;
 
     #[ORM\ManyToOne(inversedBy: 'forumPosts')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['forumcategory_read', "forumPost_read", "oneForumPost_read"])]
+    #[Groups(['forumcategory_read', "forumPost_read", "oneForumPost_read", "forumComment_read"])]
     private ?ForumCategory $idForumCategory = null;
 
     #[ORM\Column]
-    #[Groups(['forumcategory_read', "forumPost_read", "oneForumPost_read"])]
+    #[Groups(['forumcategory_read', "forumPost_read", "oneForumPost_read", "forumComment_read"])]
     private ?int $idMedia = null;
 
     #[ORM\ManyToOne(inversedBy: 'forumPosts')]
@@ -40,22 +40,22 @@ class ForumPost
     private ?User $idUser = null;
 
     #[ORM\Column]
-    #[Groups(['forumcategory_read', "forumPost_read", "oneForumPost_read"])]
+    #[Groups(['forumcategory_read', "forumPost_read", "oneForumPost_read", "forumComment_read"])]
     private ?bool $spoilers = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['forumcategory_read', "forumPost_read", "oneForumPost_read"])]
+    #[Groups(['forumcategory_read', "forumPost_read", "oneForumPost_read", "forumComment_read"])]
     private ?string $uuid = null;
 
     #[ORM\Column]
     private ?bool $isDeleted = null;
 
     #[ORM\Column]
-    #[Groups(['forumcategory_read', "forumPost_read", "oneForumPost_read"])]
+    #[Groups(['forumcategory_read', "forumPost_read", "oneForumPost_read", "forumComment_read"])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    #[Groups(['forumcategory_read', "forumPost_read", "oneForumPost_read"])]
+    #[Groups(['forumcategory_read', "forumPost_read", "oneForumPost_read", "forumComment_read"])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\OneToMany(mappedBy: 'idPost', targetEntity: ForumComment::class, orphanRemoval: true)]

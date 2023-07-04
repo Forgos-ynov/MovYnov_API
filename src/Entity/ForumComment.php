@@ -16,35 +16,36 @@ class ForumComment
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(["oneForumPost_read"])]
+    #[Groups(["oneForumPost_read", "forumComment_read"])]
     private ?string $content = null;
 
     #[ORM\ManyToOne(inversedBy: 'forumComments')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(["oneForumPost_read"])]
+    #[Groups(["oneForumPost_read", "forumComment_read"])]
     private ?User $idUser = null;
 
     #[ORM\Column]
-    #[Groups(["oneForumPost_read"])]
+    #[Groups(["oneForumPost_read", "forumComment_read"])]
     private ?bool $spoilers = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(["oneForumPost_read"])]
+    #[Groups(["oneForumPost_read", "forumComment_read"])]
     private ?string $uuid = null;
 
     #[ORM\Column]
     private ?bool $isDeleted = null;
 
     #[ORM\Column]
-    #[Groups(["oneForumPost_read"])]
+    #[Groups(["oneForumPost_read", "forumComment_read"])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    #[Groups(["oneForumPost_read"])]
+    #[Groups(["oneForumPost_read", "forumComment_read"])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'forumComments')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(["forumComment_read"])]
     private ?ForumPost $idPost = null;
 
     public function getId(): ?int

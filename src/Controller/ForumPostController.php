@@ -204,16 +204,16 @@ class ForumPostController extends AbstractController
         return "pass";
     }
 
-    private function setUser(UserRepository $userRepository, array $content, ForumPost $forumPost): ForumPost
+    private function setUser(UserRepository $userRepository, $token, ForumPost $forumPost): ForumPost
     {
-        $user = $userRepository->find($content["idUser"] ?? $forumPost->getIdUser());
-        $forumPost->setIdUser($user);
+        $user = $userRepository->retrieveUserByEmail($token->email) ?? $forumPost->getIdUser();
+        $forumPost->setIdUser($user[0]);
         return $forumPost;
     }
 
     private function setForumCat(ForumCategoryRepository $forumCategoryRepository, array $content, ForumPost $forumPost): ForumPost
     {
-        $forumCat = $forumCategoryRepository->find($content["idForumCategory"] ?? $forumPost->getIdForumCategory());
+        $forumCat = $forumCategoryRepository->find($content["idCategory"] ?? $forumPost->getIdForumCategory());
         $forumPost->setIdForumCategory($forumCat);
         return $forumPost;
     }
