@@ -14,7 +14,15 @@ class TmdbController extends AbstractController
     public function __construct()
     {
         $this->prefixeUrl = "https://api.themoviedb.org/3/movie/";
-        $this->sufixeUrl = "?append_to_response=credits&language=fr-FR&api_key=b8e285eb83d6d2fccd9f0acc529b5004";
+        $this->sufixeUrl = "?append_to_response=credits,watch/providers,videos&language=fr-FR&api_key=b8e285eb83d6d2fccd9f0acc529b5004";
+    }
+
+    #[Route('/api/tmdb/movies/popular', name: 'get_tmdb_getPopularMovies', methods: "GET")]
+    public function getPopularMovies(): JsonResponse
+    {
+        $url = $this->prefixeUrl . "popular" . $this->sufixeUrl;
+        $json = $this->getJsonFromUrl($url);
+        return $this->json($json);
     }
 
     #[Route('/api/tmdb/movies/recommandation/{idMovieRecommandation}', name: 'get_tmdb_getRecommandedMovies', methods: "GET")]
