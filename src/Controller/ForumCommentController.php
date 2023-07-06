@@ -35,9 +35,9 @@ class ForumCommentController extends AbstractController
     #[Route('/api/forums/comments/{idPost}', name: 'get_forumComment_getAllForumCommentByPost', methods: 'GET')]
     public function getAllForumCommentByPost(int $idPost): Response
     {
-        $commentJson = $this->serializer->serialize($this->commentRepository->findAllActivatedByPostId($idPost),
+        $commentsJson = $this->serializer->serialize($this->commentRepository->findAllActivatedByPostId($idPost),
             "json", ["groups" => "forumComment_read"]);
-        return new JsonResponse($commentJson, Response::HTTP_OK, [], true);
+        return new JsonResponse($commentsJson, Response::HTTP_OK, [], true);
     }
 
     #[Route('/api/forums/comments', name: 'post_forumComment_createForumComment', methods: 'POST')]
@@ -48,6 +48,7 @@ class ForumCommentController extends AbstractController
         if ($tokenRes != "pass") {
             return $tokenRes;
         }
+        $token = $this->token($request);
 
         $forumComment = $this->serializer->deserialize($request->getContent(), ForumComment::class, "json");
         $forumComment->setUuid(uniqid());
@@ -57,8 +58,8 @@ class ForumCommentController extends AbstractController
         $forumComment->setUpdatedAt($today);
         $content = $request->toArray();
 
-        $user = $userRepository->find($content["idUser"] ?? -1);
-        $forumComment->setIdUser($user);
+        $user = $userRepository->findUserByEmail($token->email);
+        $forumComment->setIdUser($user[0]);
         $forumPost = $postRepository->find($content["idForumPost"] ?? -1);
         $forumComment->setIdPost($forumPost);
 
@@ -69,8 +70,8 @@ class ForumCommentController extends AbstractController
         $this->entityManager->persist($forumComment);
         $this->entityManager->flush();
 
-        $data = $this->serializer->serialize(["message" => "Le commentaire à été créé avec succès."], 'json');
-        return new JsonResponse($data, Response::HTTP_CREATED, [], true);
+        $commentJson = $this->serializer->serialize($forumComment, "json", ["groups" => "forumComment_read"]);
+        return new JsonResponse($commentJson, Response::HTTP_CREATED, [], true);
     }
 
     #[Route('/api/forums/comments/{idForumComment}', name: 'delete_forumComment_disableForumComment', methods: 'DELETE')]
@@ -126,8 +127,8 @@ class ForumCommentController extends AbstractController
         $this->entityManager->persist($forumComment);
         $this->entityManager->flush();
 
-        $data = $this->serializer->serialize(["message" => "Le commentaire à été modifier avec succès."], 'json');
-        return new JsonResponse($data, Response::HTTP_CREATED, [], true);
+        $commentJson = $this->serializer->serialize($forumComment, "json", ["groups" => "forumComment_read"]);
+        return new JsonResponse($commentJson, Response::HTTP_CREATED, [], true);
     }
 
     private function token(Request $request)

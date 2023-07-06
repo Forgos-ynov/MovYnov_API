@@ -52,8 +52,8 @@ class WatchlistController extends AbstractController
         $this->entityManager->persist($watchlist);
         $this->entityManager->flush();
 
-        $data = $this->serializer->serialize(["message" => "Le film a été ajouté à la watchlist avec succès."], 'json');
-        return new JsonResponse($data, Response::HTTP_CREATED, [], true);
+        $watchlistJson = $this->serializer->serialize($watchlist, "json", ["groups" => "watchlist_read"]);
+        return new JsonResponse($watchlistJson, Response::HTTP_CREATED, [], true);
     }
 
     #[Route('/api/watchlists', name: 'get_watchlist_getWatchlistsByUserToken', methods: 'GET')]
@@ -69,8 +69,8 @@ class WatchlistController extends AbstractController
 
         $watchlists = $this->watchlistRepository->findAllWatchlistsByUserId($user[0]->getId());
 
-        $categoriesJson = $this->serializer->serialize($watchlists, "json", ["groups" => "watchlist_read"]);
-        return new JsonResponse($categoriesJson, Response::HTTP_OK, [], true);
+        $watchlistsJson = $this->serializer->serialize($watchlists, "json", ["groups" => "watchlist_read"]);
+        return new JsonResponse($watchlistsJson, Response::HTTP_OK, [], true);
     }
 
     #[Route('/api/watchlists/{idWatchlist}', name: 'put_watchlist_updateWatchlist', methods: 'PUT')]
@@ -92,7 +92,8 @@ class WatchlistController extends AbstractController
         $this->entityManager->persist($watchL);
         $this->entityManager->flush();
 
-        return new JsonResponse(null, Response::HTTP_CREATED);
+        $watchlistsJson = $this->serializer->serialize($watchL, "json", ["groups" => "watchlist_read"]);
+        return new JsonResponse($watchlistsJson, Response::HTTP_OK, [], true);
     }
 
     #[Route('/api/watchlists/{idWatchlist}', name: 'delete_watchlist_removeWatchlist', methods: 'DELETE')]

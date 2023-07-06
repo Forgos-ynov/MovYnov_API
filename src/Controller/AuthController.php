@@ -9,8 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use JMS\Serializer\SerializerInterface;
-use JMS\Serializer\Serializer;
+use Symfony\Component\Serializer\SerializerInterface;
 use JMS\Serializer\SerializationContext;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -72,9 +71,8 @@ class AuthController extends AbstractController
         $this->entityManager->flush();
 
         $token = $this->createToken($user);
-        $data = ['token' => $token];
-        $context = SerializationContext::create()->setGroups(["getUser"]);
-        $serializedData = $this->serializer->serialize($data, 'json', $context);
+        $data = ['token' => $token, "user" => $user];
+        $serializedData = $this->serializer->serialize($data, 'json', ["groups" => "user_read"]);
         return new JsonResponse($serializedData, Response::HTTP_CREATED, [], true);
     }
 
@@ -85,9 +83,8 @@ class AuthController extends AbstractController
         if ($res) {
             $user = $res[0];
             $token = $this->createToken($user);
-            $data = ['token' => $token];
-            $context = SerializationContext::create()->setGroups(["getUser"]);
-            $serializedData = $this->serializer->serialize($data, 'json', $context);
+            $data = ['token' => $token, "user" => $user];
+            $serializedData = $this->serializer->serialize($data, 'json', ["groups" => "user_read"]);
             return new JsonResponse($serializedData, Response::HTTP_OK, [], true);
         }
 
@@ -129,6 +126,9 @@ class AuthController extends AbstractController
         }
         $userExist = $this->userRepository->retrieveUserByEmail($infos["email"]);
         if (sizeof($userExist) == 0) {
+            return false;
+        }
+        if ($userExist[0]->isIsDeleted()) {
             return false;
         }
         if (password_verify($infos["password"], $userExist[0]->getPassword())) {

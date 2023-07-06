@@ -60,8 +60,8 @@ class ForumCategoryController extends AbstractController
         $this->entityManager->persist($forumCat);
         $this->entityManager->flush();
 
-        $data = $this->serializer->serialize(["message" => "La catégorie à été créé avec succès."], 'json');
-        return new JsonResponse($data, Response::HTTP_CREATED, [], true);
+        $categorieJson = $this->serializer->serialize($forumCat, "json", ["groups" => "forumcategory_read"]);
+        return new JsonResponse($categorieJson, Response::HTTP_CREATED, [], true);
     }
 
     #[Route('/api/forums/categories/{idForumCat}', name: 'delete_forumCat_disableForumCategory', methods: 'DELETE')]
@@ -86,9 +86,9 @@ class ForumCategoryController extends AbstractController
             $data = $this->serializer->serialize(["message" => "La catégorie n'as pas été trouvée."], 'json');
             return new JsonResponse($data, Response::HTTP_NOT_FOUND, [], true);
         }
-        $categoriesJson = $this->serializer->serialize($forumCategory, "json",
+        $categorieJson = $this->serializer->serialize($forumCategory, "json",
             ["groups" => "forumcategory_read"]);
-        return new JsonResponse($categoriesJson, Response::HTTP_OK, [], true);
+        return new JsonResponse($categorieJson, Response::HTTP_OK, [], true);
     }
 
     #[Route('/api/forums/categories/{idForumCat}', name: 'put_forumCat_updateForumCategory', methods: 'PUT')]
@@ -110,7 +110,8 @@ class ForumCategoryController extends AbstractController
         $this->entityManager->persist($forumCat);
         $this->entityManager->flush();
 
-        return new JsonResponse(null, Response::HTTP_CREATED);
+        $categorieJson = $this->serializer->serialize($forumCat, "json", ["groups" => "forumcategory_read"]);
+        return new JsonResponse($categorieJson, Response::HTTP_CREATED, [], true);
     }
 
     private function token(Request $request)

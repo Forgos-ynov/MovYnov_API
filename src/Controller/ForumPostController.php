@@ -35,9 +35,9 @@ class ForumPostController extends AbstractController
     #[Route('/api/forums/posts/{idMovie}', name: 'get_forumPost_getAllForumPostsByMovieId', methods: 'GET')]
     public function getAllForumPostsByMovieId(int $idMovie): Response
     {
-        $categoriesJson = $this->serializer->serialize($this->postRepository->findAllActivatedByMovieId($idMovie),
+        $postsJson = $this->serializer->serialize($this->postRepository->findAllActivatedByMovieId($idMovie),
             "json", ["groups" => "forumPost_read"]);
-        return new JsonResponse($categoriesJson, Response::HTTP_OK, [], true);
+        return new JsonResponse($postsJson, Response::HTTP_OK, [], true);
     }
 
     #[Route('/api/forums/posts', name: 'post_forumPost_createForumPost', methods: 'POST')]
@@ -48,6 +48,7 @@ class ForumPostController extends AbstractController
         if ($tokenRes != "pass") {
             return $tokenRes;
         }
+        $token = $this->token($request);
 
         $forumPost = $this->serializer->deserialize($request->getContent(), ForumPost::class, "json");
         $forumPost->setUuid(uniqid());
@@ -57,8 +58,8 @@ class ForumPostController extends AbstractController
         $forumPost->setUpdatedAt($today);
         $content = $request->toArray();
 
-        $user = $userRepository->find($content["idUser"] ?? -1);
-        $forumPost->setIdUser($user);
+        $user = $userRepository->findUserByEmail($token->email);
+        $forumPost->setIdUser($user[0]);
         $forumCat = $categoryRepository->find($content["idForumCategory"] ?? -1);
         $forumPost->setIdForumCategory($forumCat);
 
@@ -69,8 +70,8 @@ class ForumPostController extends AbstractController
         $this->entityManager->persist($forumPost);
         $this->entityManager->flush();
 
-        $data = $this->serializer->serialize(["message" => "Le post à été créé avec succès."], 'json');
-        return new JsonResponse($data, Response::HTTP_CREATED, [], true);
+        $postJson = $this->serializer->serialize($forumPost,"json", ["groups" => "forumPost_read"]);
+        return new JsonResponse($postJson, Response::HTTP_CREATED, [], true);
     }
 
     #[Route('/api/forums/posts/{idForumPost}', name: 'delete_forumPost_disableForumPost', methods: 'DELETE')]
@@ -95,9 +96,9 @@ class ForumPostController extends AbstractController
             $data = $this->serializer->serialize(["message" => "Le post n'as pas été trouvé."], 'json');
             return new JsonResponse($data, Response::HTTP_NOT_FOUND, [], true);
         }
-        $categoriesJson = $this->serializer->serialize($forumPost, "json",
+        $postsJson = $this->serializer->serialize($forumPost, "json",
             ["groups" => "oneForumPost_read"]);
-        return new JsonResponse($categoriesJson, Response::HTTP_OK, [], true);
+        return new JsonResponse($postsJson, Response::HTTP_OK, [], true);
     }
 
     #[Route('/api/forums/posts/{idForumPost}', name: 'put_forumPost_disableForumCategory', methods: 'PUT')]
@@ -108,7 +109,7 @@ class ForumPostController extends AbstractController
         $updateForumPost = $this->serializer->deserialize($request->getContent(), ForumPost::class, "json");
         $content = $request->toArray();
         $forumPost = $this->loadForumPostData($updateForumPost, $forumPostReq);
-        $forumPost = $this->setUser($userRepository, $content, $forumPost);
+        $forumPost = $this->setUser($forumPost);
         $forumPost = $this->setForumCat($forumCategoryRepository, $content, $forumPost);
 
         if ($this->validatorError($forumPost)) {
@@ -118,8 +119,8 @@ class ForumPostController extends AbstractController
         $this->entityManager->persist($forumPost);
         $this->entityManager->flush();
 
-        $data = $this->serializer->serialize(["message" => "Le post à été modifier avec succès."], 'json');
-        return new JsonResponse($data, Response::HTTP_CREATED, [], true);
+        $postsJson = $this->serializer->serialize($forumPost, "json", ["groups" => "forumPost_read"]);
+        return new JsonResponse($postsJson, Response::HTTP_CREATED, [], true);
     }
 
     private function token(Request $request)
@@ -204,10 +205,9 @@ class ForumPostController extends AbstractController
         return "pass";
     }
 
-    private function setUser(UserRepository $userRepository, $token, ForumPost $forumPost): ForumPost
+    private function setUser(ForumPost $forumPost): ForumPost
     {
-        $user = $userRepository->retrieveUserByEmail($token->email) ?? $forumPost->getIdUser();
-        $forumPost->setIdUser($user[0]);
+        $forumPost->setIdUser($forumPost->getIdUser());
         return $forumPost;
     }
 
