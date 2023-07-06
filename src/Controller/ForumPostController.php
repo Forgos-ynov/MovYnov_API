@@ -198,8 +198,6 @@ class ForumPostController extends AbstractController
         $token = $this->token($request);
         if ($token->exp <= time() || is_null($token)) {
             return $this->tokenNotValaible();
-        } elseif ($token->roles[0] == "ROLE_USER" && sizeof($token->roles) == 1) {
-            return $this->unAuthorize();
         }
 
         return "pass";

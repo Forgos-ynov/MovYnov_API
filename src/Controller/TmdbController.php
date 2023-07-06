@@ -47,7 +47,6 @@ class TmdbController extends AbstractController
     public function getMoviesByName(string $searchName): JsonResponse
     {
         $url = $this->prefixeUrlSearch . "movie" . $this->sufixeUrl . "&query=" . $searchName;
-        var_dump($url); die();
         $json = $this->getJsonFromUrl($url);
         return $this->json($json);
     }
