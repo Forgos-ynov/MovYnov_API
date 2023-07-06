@@ -15,6 +15,7 @@ class ForumCategory
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['forumcategory_read', "forumPost_read", "oneForumPost_read", "forumComment_read"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]

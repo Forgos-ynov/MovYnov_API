@@ -12,6 +12,7 @@ class Watchlist
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["user_read", "watchlist_read"])]
     private ?int $id = null;
 
     #[ORM\Column]

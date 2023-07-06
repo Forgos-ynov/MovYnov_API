@@ -13,6 +13,7 @@ class ForumComment
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["oneForumPost_read", "forumComment_read"])]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
