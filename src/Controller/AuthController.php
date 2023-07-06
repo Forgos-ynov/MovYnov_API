@@ -46,7 +46,7 @@ class AuthController extends AbstractController
     public function registerAuthController(Request $request): JsonResponse
     {
         if ($this->userExistInDB($request)) {
-            $data = $this->serializer->serialize(["message" => "Problème avec l'e-mail il est déjà existant ou n'est pas définit."], 'json');
+            $data = $this->serializer->serialize(["message" => "Problème avec les identifiants"], 'json');
             return new JsonResponse($data, Response::HTTP_FORBIDDEN, [], true);
         }
 
@@ -91,7 +91,7 @@ class AuthController extends AbstractController
             return new JsonResponse($serializedData, Response::HTTP_OK, [], true);
         }
 
-        $data = $this->serializer->serialize(["message" => "Problème avec l'e-mail il est déjà existant ou n'est pas définit."], 'json');
+        $data = $this->serializer->serialize(["message" => "Problème avec les identifiants"], 'json');
         return new JsonResponse($data, Response::HTTP_FORBIDDEN, [], true);
     }
 
@@ -124,14 +124,17 @@ class AuthController extends AbstractController
     {
         $bodyContent = $request->getContent();
         $infos = json_decode($bodyContent, true);
-        if (!isset($infos["email"])) {
-            return true;
+        if (!isset($infos["email"]) || !isset($infos["password"])) {
+            return false;
         }
         $userExist = $this->userRepository->retrieveUserByEmail($infos["email"]);
         if (sizeof($userExist) == 0) {
             return false;
         }
-        return $userExist;
+        if (password_verify($infos["password"], $userExist[0]->getPassword())) {
+            return $userExist;
+        }
+        return false;
     }
 
     private function createToken($user)
