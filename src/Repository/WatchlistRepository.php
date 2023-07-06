@@ -47,6 +47,18 @@ class WatchlistRepository extends ServiceEntityRepository
         }
     }
 
+    public function findWatchlistByIdUserAndIdMedia(int $idUser, int $idMedia)
+    {
+        return $this->createQueryBuilder('w')
+            ->andWhere('w.idMedia = :idMedia')
+            ->andWhere('w.idUser = :idUser')
+            ->setParameter('idUser', $idUser)
+            ->setParameter('idMedia', $idMedia)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
 //    /**
 //     * @return Watchlist[] Returns an array of Watchlist objects
 //     */
