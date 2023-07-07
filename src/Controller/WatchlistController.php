@@ -109,6 +109,23 @@ class WatchlistController extends AbstractController
         return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }
 
+    #[Route('/api/watchlists/movies/{idMovie}', name: 'delete_watchlist_removeWatchlistByIdMovie', methods: 'DELETE')]
+    public function removeWatchlistByIdMovie(int $idMovie, Request $request, UserRepository $userRepository): Response
+    {
+        $tokenRes = $this->tokenVerification($request);
+        if ($tokenRes != "pass") {
+            return $tokenRes;
+        }
+        $token = $this->token($request);
+        $user = $userRepository->retrieveUserByEmail($token->email);
+
+        $watchlists = $this->watchlistRepository->findWatchlistByIdUserAndIdMedia($user[0]->getId(), $idMovie);
+        foreach ($watchlists as $watchlist) {
+            $this->watchlistRepository->remove($watchlist, true);
+        }
+        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
+    }
+
     #[Route('/api/watchlists/{idMovie}', name: 'get_watchlist_IsInWatchList', methods: 'GET')]
     public function IsInWatchList(int $idMovie, Request $request, UserRepository $userRepository): Response
     {
