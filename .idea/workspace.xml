@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="e16d4bee-8b99-411c-a9ed-59a221b195f3" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/AuthController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/AuthController.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -115,7 +116,7 @@
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Johan/Documents/Ynov/B3/Projet-pro/movynov&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Johan/Documents/Ynov/B3/Projet-pro/movynov-web&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
@@ -132,6 +133,8 @@
       <option name="presentableId" value="Default" />
       <updated>1688560539714</updated>
       <workItem from="1688560540692" duration="14064000" />
+      <workItem from="1688740206200" duration="641000" />
+      <workItem from="1688800707359" duration="2812000" />
     </task>
     <servers />
   </component>

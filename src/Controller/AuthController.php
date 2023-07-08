@@ -32,7 +32,7 @@ class AuthController extends AbstractController
      * @param EntityManagerInterface $entityManager
      * @param UserRepository $userRepository
      */
-    public function __construct(SerializerInterface $serializer, ValidatorInterface $validator,
+    public function __construct(SerializerInterface    $serializer, ValidatorInterface $validator,
                                 EntityManagerInterface $entityManager, UserRepository $userRepository)
     {
         $this->serializer = $serializer;
@@ -60,7 +60,7 @@ class AuthController extends AbstractController
         $user->setRoles(["ROLE_USER"]);
 
         $pass = $user->getPassword();
-        $passHash = password_hash($pass, PASSWORD_ARGON2I );
+        $passHash = password_hash($pass, PASSWORD_ARGON2I);
         $user->setPassword($passHash);
 
         if ($this->validatorError($user)) {
@@ -90,6 +90,24 @@ class AuthController extends AbstractController
 
         $data = $this->serializer->serialize(["message" => "Problème avec les identifiants"], 'json');
         return new JsonResponse($data, Response::HTTP_FORBIDDEN, [], true);
+    }
+
+    #[Route('/api/token', name: 'post_auth_isAuthAuthController', methods: "get")]
+    public function isAuthAuthController(Request $request): JsonResponse
+    {
+        $token = $this->token($request);
+        if (is_null($token) || !$token->roles) {
+            $status = false;
+        } else {
+            if (in_array("ROLE_ADMIN", $token->roles)) {
+                $status = true;
+            } else {
+                $status = false;
+            }
+        }
+
+        $data = $this->serializer->serialize(["message" => $status], 'json');
+        return new JsonResponse($data, Response::HTTP_OK, [], true);
     }
 
     /**
@@ -148,5 +166,21 @@ class AuthController extends AbstractController
         ];
         $json = json_encode($payload);
         return base64_encode($json);
+    }
+
+    private function token(Request $request)
+    {
+        $authorizationHeader = $request->headers->get('Authorization');
+        $bearer = substr($authorizationHeader, 0, 6);
+
+        if ($bearer == "Bearer") {
+            $bearer = substr($authorizationHeader, 7);
+            $json = base64_decode($bearer);
+            $token = json_decode($json);
+        } else {
+            $token = null;
+        }
+
+        return $token;
     }
 }
