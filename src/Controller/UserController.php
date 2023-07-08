@@ -32,9 +32,22 @@ class UserController extends AbstractController
     }
 
     #[Route('/api/users', name: 'get_user_getAllUsers', methods: 'GET')]
-    public function getAllUsers(): Response
+    public function getAllUsers(Request $request): Response
     {
-        $usersJson = $this->serializer->serialize($this->userRepository->findAllActivated(), "json",
+        $tokenRes = $this->tokenVerification($request);
+        if ($tokenRes != "pass") {
+            return $tokenRes;
+        }
+        $token = $this->token($request);
+
+        $users = $this->userRepository->findAllActivated();
+        $usersOut = [];
+        foreach ($users as $user) {
+            if (!($user->getEmail() == $token->email)) {
+                $usersOut[] = $user;
+            }
+        }
+        $usersJson = $this->serializer->serialize($usersOut, "json",
             ["groups" => "user_read"]);
         return new JsonResponse($usersJson, Response::HTTP_OK, [], true);
     }
