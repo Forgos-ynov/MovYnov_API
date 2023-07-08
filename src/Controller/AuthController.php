@@ -44,8 +44,8 @@ class AuthController extends AbstractController
     #[Route('/api/register', name: 'post_auth_registerAuthController', methods: ["POST"])]
     public function registerAuthController(Request $request): JsonResponse
     {
-        if ($this->userExistInDB($request)) {
-            $data = $this->serializer->serialize(["message" => "Problème avec les identifiants"], 'json');
+        if (!$this->userExistInDBRegister($request)) {
+            $data = $this->serializer->serialize(["message" => "Problème avec les identifiants ou l'utilisateur existe déjà."], 'json');
             return new JsonResponse($data, Response::HTTP_FORBIDDEN, [], true);
         }
 
@@ -79,7 +79,7 @@ class AuthController extends AbstractController
     #[Route('/api/login', name: 'post_auth_loginAuthController', methods: "POST")]
     public function loginAuthController(Request $request): JsonResponse
     {
-        $res = $this->userExistInDB($request);
+        $res = $this->userExistInDBLogin($request);
         if ($res) {
             $user = $res[0];
             $token = $this->createToken($user);
@@ -135,7 +135,32 @@ class AuthController extends AbstractController
             Response::HTTP_BAD_REQUEST, [], true);
     }
 
-    private function userExistInDB(Request $request)
+    private function userExistInDBRegister(Request $request)
+    {
+        $bodyContent = $request->getContent();
+        $infos = json_decode($bodyContent, true);
+        if (!isset($infos["email"]) || !isset($infos["password"])|| !isset($infos["pseudo"])) {
+            return false;
+        }
+        $userExistPseudo = $this->userRepository->retrieveUserByPseudo($infos["pseudo"]);
+        if (sizeof($userExistPseudo) >= 1) {
+            return false;
+        }
+        $userExist = $this->userRepository->retrieveUserByEmail($infos["email"]);
+        if (sizeof($userExist) == 0) {
+            return true;
+        } else {
+            if ($userExist[0]->isIsDeleted()) {
+                return false;
+            }
+            if (password_verify($infos["password"], $userExist[0]->getPassword())) {
+                return $userExist;
+            }
+        }
+        return false;
+    }
+
+    private function userExistInDBLogin(Request $request)
     {
         $bodyContent = $request->getContent();
         $infos = json_decode($bodyContent, true);
@@ -145,12 +170,13 @@ class AuthController extends AbstractController
         $userExist = $this->userRepository->retrieveUserByEmail($infos["email"]);
         if (sizeof($userExist) == 0) {
             return false;
-        }
-        if ($userExist[0]->isIsDeleted()) {
-            return false;
-        }
-        if (password_verify($infos["password"], $userExist[0]->getPassword())) {
-            return $userExist;
+        } else {
+            if ($userExist[0]->isIsDeleted()) {
+                return false;
+            }
+            if (password_verify($infos["password"], $userExist[0]->getPassword())) {
+                return $userExist;
+            }
         }
         return false;
     }

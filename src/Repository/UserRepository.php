@@ -60,6 +60,17 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         ;
     }
 
+    public function retrieveUserByPseudo(string $pseudo)
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.pseudo = :pseudo')
+            ->setParameter('pseudo', $pseudo)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     public function remove(User $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
