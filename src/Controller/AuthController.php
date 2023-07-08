@@ -159,7 +159,7 @@ class AuthController extends AbstractController
     {
         $payload = [
             "iat" => time(),
-            "exp" => time() + (15 * 60),
+            "exp" => time() + (3 * 60 * 60),
             "roles" => $user->getRoles(),
             "pseudo" => $user->getPseudo(),
             "email" => $user->getEmail()
