@@ -52,6 +52,27 @@ class UserController extends AbstractController
         return new JsonResponse($usersJson, Response::HTTP_OK, [], true);
     }
 
+    #[Route('/api/users/search/{searching}', name: 'get_user_getAllUsersBySearching', methods: 'GET')]
+    public function getAllUsersBySearching(Request $request, string $searching): Response
+    {
+        $tokenRes = $this->tokenVerification($request);
+        if ($tokenRes != "pass") {
+            return $tokenRes;
+        }
+        $token = $this->token($request);
+
+        $users = $this->userRepository->findAllActivatedSearching($searching);
+        $usersOut = [];
+        foreach ($users as $user) {
+            if (!($user->getEmail() == $token->email)) {
+                $usersOut[] = $user;
+            }
+        }
+        $usersJson = $this->serializer->serialize($usersOut, "json",
+            ["groups" => "user_read"]);
+        return new JsonResponse($usersJson, Response::HTTP_OK, [], true);
+    }
+
 
     #[Route('/api/users/{idUser}', name: 'delete_users_disableUser', methods: 'DELETE')]
     #[ParamConverter("user", options: ["id" => "idUser"])]
