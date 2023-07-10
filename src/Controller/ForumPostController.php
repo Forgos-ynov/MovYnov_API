@@ -40,6 +40,23 @@ class ForumPostController extends AbstractController
         return new JsonResponse($postsJson, Response::HTTP_OK, [], true);
     }
 
+    #[Route('/api/forums/posts', name: 'get_forumPost_getAllForumPosts', methods: 'GET')]
+    public function getAllForumPosts(): Response
+    {
+        $postsJson = $this->serializer->serialize($this->postRepository->findAll(),
+            "json", ["groups" => "forumPost_read"]);
+        return new JsonResponse($postsJson, Response::HTTP_OK, [], true);
+    }
+
+    #[Route('/api/forums/posts/search/{searching}', name: 'get_forumPost_getAllForumPostsBySearching', methods: 'GET')]
+    public function getAllForumPostsBySearching(string $searching): Response
+    {
+        $searchingPosts = $this->postRepository->findAllActivatedSearching($searching);
+        $forumPostJson = $this->serializer->serialize($searchingPosts, "json",
+            ["groups" => "forumPost_read"]);
+        return new JsonResponse($forumPostJson, Response::HTTP_OK, [], true);
+    }
+
     #[Route('/api/forums/posts', name: 'post_forumPost_createForumPost', methods: 'POST')]
     public function createForumPost(Request $request, UserRepository $userRepository,
                                     ForumCategoryRepository $categoryRepository): Response

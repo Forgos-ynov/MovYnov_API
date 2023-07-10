@@ -34,6 +34,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function findAllActivatedSearching($searching) {
         return $this->createQueryBuilder("u")
             ->andWhere("u.pseudo LIKE :search")
+            ->andWhere("u.isDeleted = 0")
             ->setParameter('search', "%" . $searching . "%")
             ->getQuery()
             ->getResult();

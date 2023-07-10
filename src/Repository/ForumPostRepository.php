@@ -31,6 +31,15 @@ class ForumPostRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findAllActivatedSearching($searching) {
+        return $this->createQueryBuilder("u")
+            ->andWhere("u.title LIKE :search")
+            ->andWhere("u.isDeleted = 0")
+            ->setParameter('search', "%" . $searching . "%")
+            ->getQuery()
+            ->getResult();
+    }
+
     public function save(ForumPost $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
