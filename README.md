@@ -9,6 +9,7 @@ Pour lancer le projet il faut:
       - php bin/console doctrine:fixtures:load 
   - Si tout c'est bien passé un petit "symfony serve" permettra de lancer le serveur
 
+
 De base il y a 2 utilisateur qui sont dans la base de donnée:
   - L'administrateur à pour email: admin@gmail.com et mot de passe: password
   - L'utilisateur classique qui à pour email: utilisateur@gmail.com et mot de passe: password
