@@ -9,6 +9,7 @@
     "ext-curl": "*",
     "ext-iconv": "*",
     "doctrine/doctrine-bundle": "^2.9",
+    "doctrine/doctrine-fixtures-bundle": "^3.4",
     "doctrine/doctrine-migrations-bundle": "^3.2",
     "doctrine/orm": "^2.15",
     "firebase/php-jwt": "^6.8",
