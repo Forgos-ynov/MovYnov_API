@@ -43,7 +43,7 @@ class ForumPostController extends AbstractController
     #[Route('/api/forums/posts', name: 'get_forumPost_getAllForumPosts', methods: 'GET')]
     public function getAllForumPosts(): Response
     {
-        $postsJson = $this->serializer->serialize($this->postRepository->findAll(),
+        $postsJson = $this->serializer->serialize($this->postRepository->findAllActivate(),
             "json", ["groups" => "forumPost_read"]);
         return new JsonResponse($postsJson, Response::HTTP_OK, [], true);
     }

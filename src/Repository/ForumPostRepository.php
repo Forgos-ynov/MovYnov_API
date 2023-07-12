@@ -21,6 +21,14 @@ class ForumPostRepository extends ServiceEntityRepository
         parent::__construct($registry, ForumPost::class);
     }
 
+    public function findAllActivate()
+    {
+        return $this->createQueryBuilder('fp')
+            ->andWhere('fp.isDeleted = false')
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findAllActivatedByMovieId(int $idMovie)
     {
         return $this->createQueryBuilder('fp')
