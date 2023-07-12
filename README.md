@@ -5,3 +5,6 @@ Pour lancer le projet il faut:
       - php bin/console make:migration
       - php bin/console doctrine:migrations:migrate
   - Si tout c'est bien passé un petit "symfony serve" permettra de lancer le serveur
+
+
+/!\ Il faut bien faire attention à enlever "ext:sodium" dans le php.ini
